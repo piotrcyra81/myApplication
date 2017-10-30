@@ -29,8 +29,9 @@ repositories {
 
 
 dependencies {
-	// https://mvnrepository.com/artifact/org.projectlombok/lombok
-    compile('org.projectlombok:lombok:1.16.18')
 	compile('org.springframework.boot:spring-boot-starter')
 	testCompile('org.springframework.boot:spring-boot-starter-test')
+	compileOnly('org.projectlombok:lombok:1.16.18')
+	testCompile('junit:junit:4.12')
+	compile('org.springframework.boot:spring-boot-starter-web')
 }
