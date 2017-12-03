@@ -33,10 +33,6 @@ public class EmailScheduler {
         if (size != 1) {
             correctName += "s";
         }
-
-        simpleEmailService.send(new Mail(
-                adminConfig.getAdminMail(),
-                SUBJECT,
-                "Currently in database you got: " + size + " " + correctName,""));
+        simpleEmailService.send(new Mail(adminConfig.getAdminMail(), SUBJECT,"Currently in database you got: " + size + " " + correctName,""));
     }
 }
