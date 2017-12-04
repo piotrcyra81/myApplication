@@ -1,6 +1,7 @@
 package com.crud.tasks.mapper;
 
 import com.crud.tasks.domain.*;
+
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -23,13 +24,13 @@ public class TrelloMapper {
     }
 
 
-    public List<TrelloList> mapToList(final List<TrelloListDto> trelloListDto) {
+    public List<TrelloList> mapToList(final List<TrelloListDto> trelloListDto){
         return trelloListDto.stream()
                 .map(trelloList -> new TrelloList(trelloList.getId(), trelloList.getName(), trelloList.isClosed()))
                 .collect(toList());
     }
 
-    public List<TrelloListDto> mapToListDto(final List<TrelloList> trelloLists) {
+    public List<TrelloListDto> mapToListDto(final List<TrelloList> trelloLists){
         return trelloLists.stream()
                 .map(trelloList -> new TrelloListDto(trelloList.getId(), trelloList.getName(), trelloList.isClosed()))
                 .collect(toList());
