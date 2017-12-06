@@ -4,6 +4,7 @@ import com.crud.tasks.domain.Task;
 import com.crud.tasks.domain.TaskDto;
 import com.crud.tasks.mapper.TaskMapper;
 import com.crud.tasks.service.DbService;
+import com.google.gson.Gson;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -78,5 +79,73 @@ public class TaskControllerTest {
                 .andExpect(jsonPath("$.title", is("Task")))
                 .andExpect(jsonPath("$.content", is("New content")))
                 .andDo(print());
+    }
+
+    @Test
+    public void shouldDeleteTask() throws Exception {
+
+        //Given
+        Task task = new Task(2L, "Task", "New content");
+        TaskDto taskDto = new TaskDto(2L, "Task", "New content");
+
+        doNothing().when(dbService).deleteTaskById(task.getId());
+        when(taskMapper.mapToTaskDto(task)).thenReturn(taskDto);
+
+        //When & Then
+        mockMvc.perform(delete("/v1/task/deleteTask")
+                .param("taskId", "2")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    public void shouldUpdateTask() throws Exception {
+
+        //Given
+        Task task = new Task(2L, "Task", "New content");
+        TaskDto taskDto = new TaskDto(2L, "Task", "New content");
+
+        when(dbService.saveTask(task)).thenReturn(task);
+        when(taskMapper.mapToTask(any(TaskDto.class))).thenReturn(task);
+        when(taskMapper.mapToTaskDto(task)).thenReturn(taskDto);
+
+        Gson gson = new Gson();
+        String jsonContent = gson.toJson(taskDto);
+
+        //When & Then
+        mockMvc.perform(put("/v1/task/updateTask")
+                .param("taskId", "2")
+                .contentType(MediaType.APPLICATION_JSON)
+                .characterEncoding("UTF-8")
+                .content(jsonContent))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id", is(2)))
+                .andExpect(jsonPath("$.title", is("Task")))
+                .andExpect(jsonPath("$.content", is("New content")));
+    }
+
+    @Test
+    public void shouldCreateTask() throws Exception {
+
+        //Given
+        Task task = new Task(1l, "Task", "Test task");
+        TaskDto taskDto = new TaskDto(1l, "Task", "Test task");
+
+        when(dbService.saveTask(task)).thenReturn(task);
+        when(taskMapper.mapToTaskDto(task)).thenReturn(taskDto);
+        when(taskMapper.mapToTask(any(TaskDto.class))).thenReturn(task);
+
+        Gson gson = new Gson();
+        String jsonContent = gson.toJson(taskDto);
+
+        //When & Then
+        mockMvc.perform(post("/v1/task/createTask")
+                .contentType(MediaType.APPLICATION_JSON)
+                .characterEncoding("UTF-8")
+                .content(jsonContent))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id", is(1)))
+                .andExpect(jsonPath("$.title", is("Task")))
+                .andExpect(jsonPath("$.content", is("Test task")));
     }
 }
