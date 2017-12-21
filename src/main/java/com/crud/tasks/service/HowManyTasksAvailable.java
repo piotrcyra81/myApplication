@@ -17,6 +17,7 @@ public class HowManyTasksAvailable {
     @Autowired
     private AdminConfig adminConfig;
 
+
     @Autowired
     @Qualifier("templateEngine")
     private TemplateEngine templateEngine;
