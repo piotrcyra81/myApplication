@@ -39,6 +39,6 @@ public class HowManyTasksAvailable {
         context.setVariable("goodbye_message", "Bye bye!");
         context.setVariable("company_details", adminConfig.getCompanyName());
 
-        return templateEngine.process("mail/created-trello-card-mail", context);
+        return templateEngine.process("mail/mail-howManyTaskYouHave", context);
     }
 }
